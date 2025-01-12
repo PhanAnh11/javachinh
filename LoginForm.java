@@ -18,7 +18,7 @@ public class LoginForm extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton, registerButton;
     private JLabel statusLabel;
-
+//cung 
     public LoginForm() {
         setTitle("Đăng Nhập");
         setSize(400, 300);

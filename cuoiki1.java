@@ -9,109 +9,107 @@ import java.sql.*;
 
 public class cuoiki1 {
     public cuoiki1() {
-        // Tạo JFrame
+        
         JFrame frame = new JFrame("Quản lý giao thông");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         frame.setLocationRelativeTo(null);
 
-        // Tạo panel bên trái (chứa các nút)
+      
         JPanel panelTrai = new JPanel();
         panelTrai.setPreferredSize(new Dimension(200, 400)); // Tăng chiều rộng của panel bên trái
         panelTrai.setLayout(new BoxLayout(panelTrai, BoxLayout.Y_AXIS));
         panelTrai.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Tạo CardLayout và panel trung tâm
+      
         CardLayout cardLayout = new CardLayout();
         JPanel cardPanel = new JPanel(cardLayout);
 
-        // Tạo nút "Quay trở về"
+    
         JButton backButton = new JButton("Quay trở về");
-        backButton.setVisible(false); // Ẩn nút "Quay trở về" khi khởi tạo
+        backButton.setVisible(false); 
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Hiển thị lại panel bên trái
+               
                 panelTrai.setVisible(true);
-                // Ẩn nút "Quay trở về"
                 backButton.setVisible(false);
-                // Quay trở lại màn hình chính
                 cardLayout.show(cardPanel, "Main");
             }
         });
 
-        // Tạo các panel cho từng mục
+     
         JPanel panel1 = CameraPanel();
         JPanel panel2 = createViolationPanel();
         JPanel panel3 = Street();
-        JPanel panel4 = createVehicleManagementPanel(); // Thay thế bằng panel quản lý phương tiện
+        JPanel panel4 = createVehicleManagementPanel();
 
-        // Thêm các panel vào CardLayout
-        cardPanel.add(new JPanel(), "Main"); // Panel trống ban đầu
+      
+        cardPanel.add(new JPanel(), "Main"); 
         cardPanel.add(panel1, "Panel 1");
         cardPanel.add(panel2, "Panel 2");
         cardPanel.add(panel3, "Panel 3");
         cardPanel.add(panel4, "Panel 4");
 
-        // Tạo các nút điều khiển
+        
         JButton button1 = createMenuButton("Camera", cardPanel, cardLayout, "Panel 1", panelTrai, backButton);
         JButton button2 = createMenuButton("Lỗi vi phạm", cardPanel, cardLayout, "Panel 2", panelTrai, backButton);
         JButton button3 = createMenuButton("Đường bộ", cardPanel, cardLayout, "Panel 3", panelTrai, backButton);
         JButton button4 = createMenuButton("Quản lý phương tiện", cardPanel, cardLayout, "Panel 4", panelTrai, backButton);
 
-        // Thêm các nút vào panel bên trái
+      
         panelTrai.add(button1);
-        panelTrai.add(Box.createVerticalStrut(5)); // Khoảng cách giữa các nút
+        panelTrai.add(Box.createVerticalStrut(5)); 
         panelTrai.add(button2);
         panelTrai.add(Box.createVerticalStrut(5));
         panelTrai.add(button3);
         panelTrai.add(Box.createVerticalStrut(5));
         panelTrai.add(button4);
 
-        // Thêm panel và nút vào frame
+      
         frame.add(panelTrai, BorderLayout.WEST);
         frame.add(cardPanel, BorderLayout.CENTER);
         frame.add(backButton, BorderLayout.SOUTH);
 
-        // Hiển thị frame
+       
         frame.setVisible(true);
     }
 
-    // Phương thức tạo panel nội dung
+  
     private JPanel createCardPanel(String text) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Label hiển thị tiêu đề
+        
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(label, BorderLayout.CENTER);
 
         return panel;
     }
-///////////////////////////////////////////////////////////////////////////////////////
+//vi phạm
     private JPanel createViolationPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Tiêu đề
+      
         JLabel label = new JLabel("Quản lý lỗi vi phạm", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(label, BorderLayout.NORTH);
 
-        // Bảng để hiển thị dữ liệu
+       
         JTable table = new JTable();
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"ID Vi Phạm", "Biển Kiểm Soát", "Ngày Vi Phạm", "Lỗi Vi Phạm", "Xử Lý"});
         table.setModel(tableModel);
 
-        // Cuộn cho bảng
+      
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel chức năng
+ 
         JPanel functionPanel = new JPanel(new BorderLayout());
 
-        // Panel tìm kiếm
+        //  tìm kiếm
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel searchLabel = new JLabel("Tìm kiếm:");
         JTextField txtSearch = new JTextField(20);
@@ -121,7 +119,7 @@ public class cuoiki1 {
         searchPanel.add(searchButton);
         functionPanel.add(searchPanel, BorderLayout.NORTH);
 
-        // Panel các nút chức năng khác
+        // khác
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton addButton = new JButton("Thêm");
         JButton updateButton = new JButton("Sửa");
@@ -135,13 +133,13 @@ public class cuoiki1 {
 
         panel.add(functionPanel, BorderLayout.SOUTH);
 
-        // Tải dữ liệu từ bảng "vipham"
+    
         loadViolationData(tableModel);
 
-        // Lưu lại bản gốc của bảng dữ liệu
+       
         DefaultTableModel originalTableModel = (DefaultTableModel) table.getModel();
 
-        // Xử lý nút "Tìm kiếm"
+       
         searchButton.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
             if (keyword.isEmpty()) {
@@ -149,7 +147,7 @@ public class cuoiki1 {
                 return;
             }
 
-            // Lọc dữ liệu
+           
             DefaultTableModel filteredModel = new DefaultTableModel();
             filteredModel.setColumnIdentifiers(new String[]{"ID Vi Phạm", "Biển Kiểm Soát", "Ngày Vi Phạm", "Lỗi Vi Phạm", "Xử Lý"});
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
@@ -175,13 +173,13 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Hiển thị tất cả"
+  
         resetButton.addActionListener(e -> {
             loadViolationData(originalTableModel);
             table.setModel(originalTableModel);
         });
 
-        // Xử lý nút "Thêm"
+        // Thêm dữ liệu
         addButton.addActionListener(e -> {
             JTextField txtIdViPham = new JTextField();
             JTextField txtBienSo = new JTextField();
@@ -220,7 +218,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Sửa"
+        // Sửa dữ liệu
         updateButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -267,7 +265,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Xóa"
+        // Xóa dữ liệu
         deleteButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -293,9 +291,9 @@ public class cuoiki1 {
 
         return panel;
     } 
-    // Phương thức tải dữ liệu từ bảng "vipham"
+    
     private void loadViolationData(DefaultTableModel tableModel) {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0); 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT idvipham, bienkiemsoat, ngayvipham, loivipham, xuly FROM vipham")) {
@@ -313,29 +311,29 @@ public class cuoiki1 {
             ex.printStackTrace();
         }
     }
-
+//quản lý phương tiện
     private JPanel createVehicleManagementPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Label tiêu đề
+        
         JLabel label = new JLabel("Quản lý phương tiện", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(label, BorderLayout.NORTH);
 
-        // Bảng để hiển thị dữ liệu
+        
         JTable table = new JTable();
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"Biển kiểm soát", "Loại xe", "Màu sắc", "Chủ xe", "Phân khối xe"});
         table.setModel(tableModel);
 
-        // Cuộn cho bảng
+       
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel chức năng
+
         JPanel functionPanel = new JPanel(new BorderLayout());
 
-        // Panel tìm kiếm
+        //  kiếm
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel searchLabel = new JLabel("Tìm kiếm:");
         JTextField txtSearch = new JTextField(20);
@@ -345,7 +343,7 @@ public class cuoiki1 {
         searchPanel.add(searchButton);
         functionPanel.add(searchPanel, BorderLayout.NORTH);
 
-        // Panel các nút chức năng khác
+        // khác
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton addButton = new JButton("Thêm");
         JButton updateButton = new JButton("Sửa");
@@ -360,9 +358,9 @@ public class cuoiki1 {
 
         panel.add(functionPanel, BorderLayout.SOUTH);
 
-        // Kết nối cơ sở dữ liệu và tải dữ liệu vào bảng
+
         loadVehicleData(tableModel);
-        //tim kiếm
+      
         DefaultTableModel originalTableModel = (DefaultTableModel) table.getModel();
         searchButton.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
@@ -371,7 +369,7 @@ public class cuoiki1 {
                 return;
             }
 
-            // Lọc dữ liệu và cập nhật vào bảng
+           
             int columnCount = tableModel.getColumnCount();
             String[] columnIdentifiers = new String[columnCount];
             for (int i = 0; i < columnCount; i++) {
@@ -394,17 +392,17 @@ public class cuoiki1 {
                             rs.getInt("phankhoixe")
                     });
                 }
-                table.setModel(filteredModel); // Cập nhật dữ liệu lên bảng
+                table.setModel(filteredModel); 
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Lỗi khi tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
-        //hiển thị hết
+       
         resetButton.addActionListener(e -> {
             table.setModel(originalTableModel);
         });
-        // Xử lý nút "Thêm"
+        // Thêm dữ liệu
         addButton.addActionListener(e -> {
             JTextField txtBienSo = new JTextField();
             JTextField txtLoaiXe = new JTextField();
@@ -435,7 +433,7 @@ public class cuoiki1 {
                     ps.setString(4, txtChuXe.getText());
                     ps.setInt(5, Integer.parseInt(txtPhanKhoi.getText()));
                     ps.executeUpdate();
-                    loadVehicleData(tableModel); // Làm mới bảng sau khi thêm
+                    loadVehicleData(tableModel); 
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Thêm phương tiện thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -443,7 +441,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Sửa"
+     // Sửa dữ liệu
         updateButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -451,13 +449,17 @@ public class cuoiki1 {
                 return;
             }
 
-            String bienSo = (String) tableModel.getValueAt(selectedRow, 0);
+       
+            String oldBienSo = (String) tableModel.getValueAt(selectedRow, 0); 
+            JTextField txtBienSo = new JTextField(oldBienSo); 
             JTextField txtLoaiXe = new JTextField((String) tableModel.getValueAt(selectedRow, 1));
             JTextField txtMauSac = new JTextField((String) tableModel.getValueAt(selectedRow, 2));
             JTextField txtChuXe = new JTextField((String) tableModel.getValueAt(selectedRow, 3));
             JTextField txtPhanKhoi = new JTextField(tableModel.getValueAt(selectedRow, 4).toString());
 
-            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            JPanel inputPanel = new JPanel(new GridLayout(5, 2));
+            inputPanel.add(new JLabel("Biển kiểm soát:"));
+            inputPanel.add(txtBienSo);
             inputPanel.add(new JLabel("Loại xe:"));
             inputPanel.add(txtLoaiXe);
             inputPanel.add(new JLabel("Màu sắc:"));
@@ -469,16 +471,38 @@ public class cuoiki1 {
 
             int result = JOptionPane.showConfirmDialog(null, inputPanel, "Sửa thông tin phương tiện", JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.OK_OPTION) {
+                String newBienSo = txtBienSo.getText(); 
                 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
-                    String query = "UPDATE qlyphuongtien SET loaixe = ?, mausacxe = ?, chuxe = ?, phankhoixe = ? WHERE bienkiemsoat = ?";
-                    PreparedStatement ps = conn.prepareStatement(query);
-                    ps.setString(1, txtLoaiXe.getText());
-                    ps.setString(2, txtMauSac.getText());
-                    ps.setString(3, txtChuXe.getText());
-                    ps.setInt(4, Integer.parseInt(txtPhanKhoi.getText()));
-                    ps.setString(5, bienSo);
+                    
+                    if (!newBienSo.equals(oldBienSo)) {
+                        String checkQuery = "SELECT COUNT(*) FROM qlyphuongtien WHERE bienkiemsoat = ?";
+                        PreparedStatement checkPs = conn.prepareStatement(checkQuery);
+                        checkPs.setString(1, newBienSo);
+                        ResultSet rs = checkPs.executeQuery();
+                        rs.next();
+                        int count = rs.getInt(1);
+                        if (count > 0) {
+                            JOptionPane.showMessageDialog(null, "Biển kiểm soát mới đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+                    }
+
+                 
+                    String updateQuery = "UPDATE qlyphuongtien SET bienkiemsoat = ?, loaixe = ?, mausacxe = ?, chuxe = ?, phankhoixe = ? WHERE bienkiemsoat = ?";
+                    PreparedStatement ps = conn.prepareStatement(updateQuery);
+                    ps.setString(1, newBienSo); 
+                    ps.setString(2, txtLoaiXe.getText());
+                    ps.setString(3, txtMauSac.getText());
+                    ps.setString(4, txtChuXe.getText());
+                    ps.setInt(5, Integer.parseInt(txtPhanKhoi.getText()));
+                    ps.setString(6, oldBienSo); 
                     ps.executeUpdate();
-                    loadVehicleData(tableModel); // Làm mới bảng sau khi sửa
+
+                  
+                    loadVehicleData(tableModel);
+                    JOptionPane.showMessageDialog(null, "Sửa phương tiện thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Phân khối phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Sửa phương tiện thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -486,7 +510,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Xóa"
+        // Xóa dữ liệ
         deleteButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -502,7 +526,7 @@ public class cuoiki1 {
                     PreparedStatement ps = conn.prepareStatement(query);
                     ps.setString(1, bienSo);
                     ps.executeUpdate();
-                    loadVehicleData(tableModel); // Làm mới bảng sau khi xóa
+                    loadVehicleData(tableModel); 
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Xóa phương tiện thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -514,9 +538,9 @@ public class cuoiki1 {
         return panel;
     }
 
-    // Phương thức tải lại dữ liệu từ cơ sở dữ liệu
+  
     private void loadVehicleData(DefaultTableModel tableModel) {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0); 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT bienkiemsoat, loaixe, mausacxe, chuxe, phankhoixe FROM qlyphuongtien")) {
@@ -534,28 +558,29 @@ public class cuoiki1 {
             ex.printStackTrace();
         }
     }
+    //quản lý cam
     private JPanel CameraPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Tiêu đề
+      
         JLabel label = new JLabel("Quản lý camera", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(label, BorderLayout.NORTH);
 
-        // Bảng để hiển thị dữ liệu
+
         JTable table = new JTable();
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"ID Camera", "Vị Trí", "Ngày Kiểm Tra", "Sử Dụng"});
         table.setModel(tableModel);
 
-        // Cuộn cho bảng
+
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel chức năng
+
         JPanel functionPanel = new JPanel(new BorderLayout());
 
-        // Panel tìm kiếm
+        //tìm kiếm
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel searchLabel = new JLabel("Tìm kiếm:");
         JTextField txtSearch = new JTextField(20);
@@ -565,7 +590,7 @@ public class cuoiki1 {
         searchPanel.add(searchButton);
         functionPanel.add(searchPanel, BorderLayout.NORTH);
 
-        // Panel các nút chức năng khác
+        // khác
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton addButton = new JButton("Thêm");
         JButton updateButton = new JButton("Sửa");
@@ -579,13 +604,13 @@ public class cuoiki1 {
 
         panel.add(functionPanel, BorderLayout.SOUTH);
 
-        // Tải dữ liệu từ bảng "camera"
+  
         loadCameraData(tableModel);
 
-        // Lưu lại bản gốc của bảng dữ liệu
+
         DefaultTableModel originalTableModel = (DefaultTableModel) table.getModel();
 
-        // Xử lý nút "Tìm kiếm"
+        // tìm kiếm
         searchButton.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
             if (keyword.isEmpty()) {
@@ -593,7 +618,7 @@ public class cuoiki1 {
                 return;
             }
 
-            // Lọc dữ liệu
+   
             DefaultTableModel filteredModel = new DefaultTableModel();
             filteredModel.setColumnIdentifiers(new String[]{"ID Camera", "Vị Trí", "Ngày Kiểm Tra", "Sử Dụng"});
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
@@ -618,19 +643,21 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Hiển thị tất cả"
+       
         resetButton.addActionListener(e -> {
             loadCameraData(originalTableModel);
             table.setModel(originalTableModel);
         });
 
-        // Xử lý nút "Thêm"
         addButton.addActionListener(e -> {
+            JTextField txtIDCamera = new JTextField();
             JTextField txtViTri = new JTextField();
             JTextField txtNgayKiemTra = new JTextField();
             JTextField txtSuDung = new JTextField();
 
-            JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            inputPanel.add(new JLabel("ID Camera:"));
+            inputPanel.add(txtIDCamera);
             inputPanel.add(new JLabel("Vị trí:"));
             inputPanel.add(txtViTri);
             inputPanel.add(new JLabel("Ngày kiểm tra:"));
@@ -641,11 +668,12 @@ public class cuoiki1 {
             int result = JOptionPane.showConfirmDialog(null, inputPanel, "Thêm camera", JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.OK_OPTION) {
                 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
-                    String query = "INSERT INTO camera (vitri, ngaykiemtra, sudung) VALUES (?, ?, ?)";
+                    String query = "INSERT INTO camera (idcamera, vitri, ngaykiemtra, sudung) VALUES (?, ?, ?, ?)";
                     PreparedStatement ps = conn.prepareStatement(query);
-                    ps.setString(1, txtViTri.getText());
-                    ps.setString(2, txtNgayKiemTra.getText());
-                    ps.setString(3, txtSuDung.getText());
+                    ps.setString(1, txtIDCamera.getText());
+                    ps.setString(2, txtViTri.getText());
+                    ps.setString(3, txtNgayKiemTra.getText());
+                    ps.setString(4, txtSuDung.getText());
                     ps.executeUpdate();
                     loadCameraData(tableModel);
                 } catch (SQLException ex) {
@@ -655,7 +683,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Sửa"
+        //Sửa dữ liệu
         updateButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -663,12 +691,16 @@ public class cuoiki1 {
                 return;
             }
 
-            String idCamera = (String) tableModel.getValueAt(selectedRow, 0);
+     
+            String originalIDCamera = (String) tableModel.getValueAt(selectedRow, 0); // ID Camera gốc
+            JTextField txtIDCamera = new JTextField(originalIDCamera);
             JTextField txtViTri = new JTextField((String) tableModel.getValueAt(selectedRow, 1));
             JTextField txtNgayKiemTra = new JTextField((String) tableModel.getValueAt(selectedRow, 2));
             JTextField txtSuDung = new JTextField((String) tableModel.getValueAt(selectedRow, 3));
 
-            JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            inputPanel.add(new JLabel("ID Camera:"));
+            inputPanel.add(txtIDCamera);
             inputPanel.add(new JLabel("Vị trí:"));
             inputPanel.add(txtViTri);
             inputPanel.add(new JLabel("Ngày kiểm tra:"));
@@ -676,16 +708,33 @@ public class cuoiki1 {
             inputPanel.add(new JLabel("Sử dụng:"));
             inputPanel.add(txtSuDung);
 
+      
             int result = JOptionPane.showConfirmDialog(null, inputPanel, "Sửa camera", JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.OK_OPTION) {
+                String newIDCamera = txtIDCamera.getText();
                 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
-                    String query = "UPDATE camera SET vitri = ?, ngaykiemtra = ?, sudung = ? WHERE idcamera = ?";
+                    // Kiểm tra nếu ID Camera mới trùng với ID hiện có (trừ ID gốc)
+                    String checkQuery = "SELECT COUNT(*) FROM camera WHERE idcamera = ? AND idcamera != ?";
+                    PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+                    checkStmt.setString(1, newIDCamera);
+                    checkStmt.setString(2, originalIDCamera);
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        JOptionPane.showMessageDialog(null, "ID Camera đã tồn tại. Vui lòng nhập ID khác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                  
+                    String query = "UPDATE camera SET idcamera = ?, vitri = ?, ngaykiemtra = ?, sudung = ? WHERE idcamera = ?";
                     PreparedStatement ps = conn.prepareStatement(query);
-                    ps.setString(1, txtViTri.getText());
-                    ps.setString(2, txtNgayKiemTra.getText());
-                    ps.setString(3, txtSuDung.getText());
-                    ps.setString(4, idCamera);
+                    ps.setString(1, newIDCamera);
+                    ps.setString(2, txtViTri.getText());
+                    ps.setString(3, txtNgayKiemTra.getText());
+                    ps.setString(4, txtSuDung.getText());
+                    ps.setString(5, originalIDCamera); 
                     ps.executeUpdate();
+
+             
                     loadCameraData(tableModel);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -694,7 +743,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Xóa"
+        // Xóa dữ liệu
         deleteButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -721,9 +770,9 @@ public class cuoiki1 {
         return panel;
     }
 
-    // Phương thức tải dữ liệu từ bảng "camera"
+
     private void loadCameraData(DefaultTableModel tableModel) {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0); 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT idcamera, vitri, ngaykiemtra, sudung FROM camera")) {
@@ -740,28 +789,29 @@ public class cuoiki1 {
             ex.printStackTrace();
         }
     }
+    //đường bộ
     private JPanel Street() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Tiêu đề
+        
         JLabel label = new JLabel("Quản lý đường bộ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(label, BorderLayout.NORTH);
 
-        // Bảng để hiển thị dữ liệu
+  
         JTable table = new JTable();
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"ID Đường", "Tên Đường", "Ngày Bảo Dưỡng", "Giao Thông"});
         table.setModel(tableModel);
 
-        // Cuộn cho bảng
+    
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel chức năng
+
         JPanel functionPanel = new JPanel(new BorderLayout());
 
-        // Panel tìm kiếm
+//tìm kiếm
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel searchLabel = new JLabel("Tìm kiếm:");
         JTextField txtSearch = new JTextField(20);
@@ -771,7 +821,7 @@ public class cuoiki1 {
         searchPanel.add(searchButton);
         functionPanel.add(searchPanel, BorderLayout.NORTH);
 
-        // Panel các nút chức năng khác
+        // khác
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton addButton = new JButton("Thêm");
         JButton updateButton = new JButton("Sửa");
@@ -785,13 +835,13 @@ public class cuoiki1 {
 
         panel.add(functionPanel, BorderLayout.SOUTH);
 
-        // Tải dữ liệu từ bảng "duongbo"
+   
         loadRoadData(tableModel);
 
-        // Lưu lại bản gốc của bảng dữ liệu
+
         DefaultTableModel originalTableModel = (DefaultTableModel) table.getModel();
 
-        // Xử lý nút "Tìm kiếm"
+     
         searchButton.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
             if (keyword.isEmpty()) {
@@ -799,7 +849,7 @@ public class cuoiki1 {
                 return;
             }
 
-            // Lọc dữ liệu
+
             DefaultTableModel filteredModel = new DefaultTableModel();
             filteredModel.setColumnIdentifiers(new String[]{"ID Đường", "Tên Đường", "Ngày Bảo Dưỡng", "Giao Thông"});
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426");
@@ -821,19 +871,22 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Hiển thị tất cả"
+  
         resetButton.addActionListener(e -> {
             loadRoadData(originalTableModel);
             table.setModel(originalTableModel);
         });
 
-        // Xử lý nút "Thêm"
+     // Thêm dữ liệu
         addButton.addActionListener(e -> {
+            JTextField txtIDDuong = new JTextField();
             JTextField txtTenDuong = new JTextField();
             JTextField txtNgayBaoDuong = new JTextField();
             JTextField txtGiaoThong = new JTextField();
 
-            JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            inputPanel.add(new JLabel("ID Đường:"));
+            inputPanel.add(txtIDDuong);
             inputPanel.add(new JLabel("Tên đường:"));
             inputPanel.add(txtTenDuong);
             inputPanel.add(new JLabel("Ngày bảo dưỡng:"));
@@ -844,11 +897,12 @@ public class cuoiki1 {
             int result = JOptionPane.showConfirmDialog(null, inputPanel, "Thêm đường bộ", JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.OK_OPTION) {
                 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
-                    String query = "INSERT INTO duongbo (tenduong, ngaybaoduong, giaothong) VALUES (?, ?, ?)";
+                    String query = "INSERT INTO duongbo (idduong, tenduong, ngaybaoduong, giaothong) VALUES (?, ?, ?, ?)";
                     PreparedStatement ps = conn.prepareStatement(query);
-                    ps.setString(1, txtTenDuong.getText());
-                    ps.setString(2, txtNgayBaoDuong.getText());
-                    ps.setString(3, txtGiaoThong.getText());
+                    ps.setString(1, txtIDDuong.getText());
+                    ps.setString(2, txtTenDuong.getText());
+                    ps.setString(3, txtNgayBaoDuong.getText());
+                    ps.setString(4, txtGiaoThong.getText());
                     ps.executeUpdate();
                     loadRoadData(tableModel);
                 } catch (SQLException ex) {
@@ -858,7 +912,7 @@ public class cuoiki1 {
             }
         });
 
-        // Xử lý nút "Sửa"
+        // Sửa dữ liệu
         updateButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -866,12 +920,14 @@ public class cuoiki1 {
                 return;
             }
 
-            String idDuong = (String) tableModel.getValueAt(selectedRow, 0);
+            JTextField txtIDDuong = new JTextField((String) tableModel.getValueAt(selectedRow, 0));
             JTextField txtTenDuong = new JTextField((String) tableModel.getValueAt(selectedRow, 1));
             JTextField txtNgayBaoDuong = new JTextField((String) tableModel.getValueAt(selectedRow, 2));
             JTextField txtGiaoThong = new JTextField((String) tableModel.getValueAt(selectedRow, 3));
 
-            JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            inputPanel.add(new JLabel("ID Đường:"));
+            inputPanel.add(txtIDDuong);
             inputPanel.add(new JLabel("Tên đường:"));
             inputPanel.add(txtTenDuong);
             inputPanel.add(new JLabel("Ngày bảo dưỡng:"));
@@ -882,12 +938,13 @@ public class cuoiki1 {
             int result = JOptionPane.showConfirmDialog(null, inputPanel, "Sửa đường bộ", JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.OK_OPTION) {
                 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
-                    String query = "UPDATE duongbo SET tenduong = ?, ngaybaoduong = ?, giaothong = ? WHERE idduong = ?";
+                    String query = "UPDATE duongbo SET idduong = ?, tenduong = ?, ngaybaoduong = ?, giaothong = ? WHERE idduong = ?";
                     PreparedStatement ps = conn.prepareStatement(query);
-                    ps.setString(1, txtTenDuong.getText());
-                    ps.setString(2, txtNgayBaoDuong.getText());
-                    ps.setString(3, txtGiaoThong.getText());
-                    ps.setString(4, idDuong);
+                    ps.setString(1, txtIDDuong.getText());
+                    ps.setString(2, txtTenDuong.getText());
+                    ps.setString(3, txtNgayBaoDuong.getText());
+                    ps.setString(4, txtGiaoThong.getText());
+                    ps.setString(5, (String) tableModel.getValueAt(selectedRow, 0)); // ID gốc để tìm bản ghi
                     ps.executeUpdate();
                     loadRoadData(tableModel);
                 } catch (SQLException ex) {
@@ -896,8 +953,7 @@ public class cuoiki1 {
                 }
             }
         });
-
-        // Xử lý nút "Xóa"
+        // Xóa dữ liệu
         deleteButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {

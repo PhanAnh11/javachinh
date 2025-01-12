@@ -75,7 +75,7 @@ public class RegisterForm extends JFrame {
         gbc.gridy = 5;
         add(statusLabel, gbc);
 
-        // Xử lý sự kiện nút Đăng Ký
+ 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class RegisterForm extends JFrame {
             }
         });
 
-        // Xử lý sự kiện nút Quay Lại
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

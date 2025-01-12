@@ -18,7 +18,7 @@ public class LoginForm extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton, registerButton;
     private JLabel statusLabel;
-//okkkkk
+
     public LoginForm() {
         setTitle("Đăng Nhập");
         setSize(400, 300);
@@ -65,7 +65,7 @@ public class LoginForm extends JFrame {
         gbc.gridy = 4;
         add(statusLabel, gbc);
 
-        // Xử lý sự kiện nút Đăng Nhập
+     
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,9 +74,9 @@ public class LoginForm extends JFrame {
                 if (checkLogin(username, password)) {
                     statusLabel.setForeground(Color.GREEN);
                     statusLabel.setText("Đăng nhập thành công!");
-                    // Mở giao diện tiếp theo
-                    dispose(); // Đóng cửa sổ đăng nhập
-                    SwingUtilities.invokeLater(() -> new cuoiki1	()); // Hiển thị giao diện Quản lý giao thông
+                    
+                    dispose(); 
+                    SwingUtilities.invokeLater(() -> new cuoiki1	()); 
                 } else {
                     statusLabel.setForeground(Color.RED);
                     statusLabel.setText("Sai tên đăng nhập hoặc mật khẩu.");
@@ -84,7 +84,7 @@ public class LoginForm extends JFrame {
             }
         });
 
-        // Xử lý sự kiện nút Đăng Ký
+  
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

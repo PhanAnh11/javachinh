@@ -596,11 +596,15 @@ public class cuoiki1 {
         JButton updateButton = new JButton("Sửa");
         JButton deleteButton = new JButton("Xóa");
         JButton resetButton = new JButton("Hiển thị tất cả");
+        JButton statsButton = new JButton("Thống kê"); // Nút thống kê
+
         buttonPanel.add(resetButton);
         buttonPanel.add(addButton);
         buttonPanel.add(updateButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(statsButton); // Thêm nút vào panel
         functionPanel.add(buttonPanel, BorderLayout.CENTER);
+
 
         panel.add(functionPanel, BorderLayout.SOUTH);
 
@@ -647,6 +651,50 @@ public class cuoiki1 {
         resetButton.addActionListener(e -> {
             loadCameraData(originalTableModel);
             table.setModel(originalTableModel);
+        });
+        String[] options = {"Tổng số lượng", "Theo vị trí", "Theo trạng thái sử dụng"};
+        JComboBox<String> statsComboBox = new JComboBox<>(options);
+        buttonPanel.add(statsComboBox);
+        statsButton.addActionListener(e -> {
+            String selectedOption = (String) statsComboBox.getSelectedItem(); // Lấy lựa chọn từ ComboBox
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "513426")) {
+                if ("Tổng số lượng".equals(selectedOption)) {
+                    // Thống kê tổng số lượng
+                    String query = "SELECT COUNT(*) AS total FROM camera";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+
+                    if (rs.next()) {
+                        int totalCameras = rs.getInt("total");
+                        JOptionPane.showMessageDialog(null, "Tổng số lượng camera: " + totalCameras, "Thống kê", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if ("Theo vị trí".equals(selectedOption)) {
+                    // Thống kê số lượng theo vị trí
+                    String query = "SELECT vitri, COUNT(*) AS total FROM camera GROUP BY vitri";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+
+                    StringBuilder result = new StringBuilder("Số lượng camera theo vị trí:\n");
+                    while (rs.next()) {
+                        result.append(rs.getString("vitri")).append(": ").append(rs.getInt("total")).append("\n");
+                    }
+                    JOptionPane.showMessageDialog(null, result.toString(), "Thống kê", JOptionPane.INFORMATION_MESSAGE);
+                } else if ("Theo trạng thái sử dụng".equals(selectedOption)) {
+                    // Thống kê số lượng theo trạng thái sử dụng
+                    String query = "SELECT sudung, COUNT(*) AS total FROM camera GROUP BY sudung";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+
+                    StringBuilder result = new StringBuilder("Số lượng camera theo trạng thái sử dụng:\n");
+                    while (rs.next()) {
+                        result.append(rs.getString("sudung")).append(": ").append(rs.getInt("total")).append("\n");
+                    }
+                    JOptionPane.showMessageDialog(null, result.toString(), "Thống kê", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi thống kê!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         addButton.addActionListener(e -> {
